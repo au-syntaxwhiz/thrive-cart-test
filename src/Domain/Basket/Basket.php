@@ -32,11 +32,32 @@ class Basket implements BasketInterface
         $this->offers = $offers;
     }
 
-    public function add(string $productCode): void {}
+    public function add(string $productCode): void
+    {
+        if (!isset($this->catalogue[$productCode])) {
+            throw new \InvalidArgumentException("Product code $productCode not found in catalogue.");
+        }
+        foreach ($this->items as $item) {
+            if ($item->getProduct()->getCode() === $productCode) {
+                $item->increment();
+                return;
+            }
+        }
+        $this->items[] = new BasketItem($this->catalogue[$productCode]);
+    }
 
     public function total(): float
     {
-        return 0.0;
+        $subtotal = 0.0;
+        foreach ($this->items as $item) {
+            $subtotal += $item->getProduct()->getPrice() * $item->getQuantity();
+        }
+        $discount = 0.0;
+        foreach ($this->offers as $offer) {
+            $discount += $offer->apply($this->items);
+        }
+        $delivery = $this->deliveryRule->calculate($subtotal - $discount);
+        return round($subtotal - $discount + $delivery, 2);
     }
 
     public function getItems(): array

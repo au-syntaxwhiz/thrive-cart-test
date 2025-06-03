@@ -8,12 +8,17 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use ThriveCartAcme\Console\Command\BasketCostCommand;
+use ThriveCartAcme\Service\BasketService;
 
 // Basic error handling
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
 $application = new Application('ThriveCart CLI', '1.0.0');
+
+$basketService = new BasketService();
+$application->add(new BasketCostCommand($basketService));
 
 $input = new ArgvInput();
 $output = new ConsoleOutput();
