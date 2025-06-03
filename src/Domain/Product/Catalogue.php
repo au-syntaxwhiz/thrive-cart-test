@@ -37,10 +37,22 @@ class Catalogue implements CatalogueInterface
         return self::$products;
     }
 
-    public function getProduct(string $code): ?Product
+    /**
+     * Get a product by its code.
+     * 
+     * @param string $code The product code to look up
+     * @return Product The requested product
+     * @throws \InvalidArgumentException If the product code is not found
+     */
+    public function getProduct(string $code): Product
     {
         self::initialize();
-        return self::$products[$code] ?? null;
+
+        if (!isset(self::$products[$code])) {
+            throw new \InvalidArgumentException("Product code $code not found in catalogue");
+        }
+
+        return self::$products[$code];
     }
 
     public function hasProduct(string $code): bool

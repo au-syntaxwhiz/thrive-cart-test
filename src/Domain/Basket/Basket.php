@@ -52,11 +52,16 @@ class Basket implements BasketInterface
         foreach ($this->items as $item) {
             $subtotal += $item->getProduct()->getPrice() * $item->getQuantity();
         }
+
+        // Calculate discount
         $discount = 0.0;
         foreach ($this->offers as $offer) {
             $discount += $offer->apply($this->items);
         }
-        $delivery = $this->deliveryRule->calculate($subtotal - $discount);
+
+        // Calculate delivery based on subtotal before discount
+        $delivery = $this->deliveryRule->calculate($subtotal);
+
         return round($subtotal - $discount + $delivery, 2);
     }
 

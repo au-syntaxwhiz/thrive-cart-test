@@ -62,7 +62,7 @@ class BasketService
     {
         $subtotal = $this->calculateSubtotal($basket->getItems());
         $discount = $this->calculateDiscount($basket->getItems());
-        $delivery = $this->calculateDelivery($subtotal - $discount);
+        $delivery = $this->calculateDelivery($subtotal);
         $total = round($subtotal - $discount + $delivery, 2);
 
         return [
