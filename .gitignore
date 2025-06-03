@@ -1,10 +1,13 @@
 /vendor/
 .env
+.env.*
+!.env.example
+composer.lock
 .env.backup
+.phpunit.cache/
 .phpunit.result.cache
 docker/mysql/
 .idea/
 .vscode/
 *.log
-composer.lock
 .DS_Store 
