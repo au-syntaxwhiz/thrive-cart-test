@@ -1,0 +1,26 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
+
+// Basic error handling
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+
+$application = new Application('ThriveCart CLI', '1.0.0');
+
+$input = new ArgvInput();
+$output = new ConsoleOutput();
+
+try {
+    $application->run($input, $output);
+} catch (\Exception $e) {
+    $output->writeln('<error>' . $e->getMessage() . '</error>');
+    exit(1);
+}
