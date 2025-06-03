@@ -1,0 +1,10 @@
+/vendor/
+.env
+.env.backup
+.phpunit.result.cache
+docker/mysql/
+.idea/
+.vscode/
+*.log
+composer.lock
+.DS_Store 
