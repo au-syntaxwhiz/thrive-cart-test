@@ -10,11 +10,14 @@ use ThriveCartAcme\Domain\Basket\BasketItem;
 use ThriveCartAcme\Domain\Delivery\DeliveryRule;
 use ThriveCartAcme\Domain\Offer\RedWidgetHalfPriceOffer;
 use ThriveCartAcme\Domain\Product\Product;
+use ThriveCartAcme\Domain\Offer\OfferInterface;
 
 class BasketTest extends TestCase
 {
+    /** @var array<string, Product> */
     private array $catalogue;
     private DeliveryRule $deliveryRule;
+    /** @var array<OfferInterface> */
     private array $offers;
     private Basket $basket;
 

@@ -4,10 +4,4 @@ parameters:
         - src
         - tests
     excludePaths:
-        - vendor/*
-    checkMissingIterableValueType: false
-    checkGenericClassInNonGenericObjectType: false
-    ignoreErrors:
-        - '#Call to an undefined method [a-zA-Z0-9\\_]+::shouldReceive\(\)#'
-        - '#Call to an undefined method [a-zA-Z0-9\\_]+::andReturn\(\)#'
-        - '#Call to an undefined method [a-zA-Z0-9\\_]+::with\(\)#' 
+        - vendor/* 

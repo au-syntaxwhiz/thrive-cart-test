@@ -1,67 +1,126 @@
-# ThriveCart ACME Project
+# Acme Widget Co (ThriveCart)
 
-## CLI Commands
+## Overview
+This is the test project for ThriveCart.
 
-The project includes a command-line interface (CLI) built with Symfony Console. The main entry point is located in the `bin` directory.
 
-### Bin Directory
 
-The `bin` directory contains the executable script `thrive-cart`, which is the main entry point for all CLI commands. This script is registered in `composer.json` under the `bin` section, allowing you to run commands globally if installed via Composer.
+## Packages
+- **PHP 8.2**: The project requires PHP 8.2 or higher.
+- **Symfony Console**: Used for CLI commands.
+- **PHPUnit**: For unit and integration testing.
+- **PHPStan**: For static analysis.
+- **PHP_CodeSniffer**: For code style checking and fixing.
 
-### Usage
-
-To run a command, use:
-
-```bash
-php bin/thrive-cart <command>
+## Directory Structure
+```
+ThriveCart/
+├── bin/
+│   └── thrive-cart
+├── src/
+│   ├── Console/
+│   │   └── Command/
+│   │       ├── AbstractCommand.php
+│   │       └── BasketCostCommand.php
+│   ├── Domain/
+│   │   ├── Basket/
+│   │   │   ├── Basket.php
+│   │   │   └── BasketItem.php
+│   │   ├── Delivery/
+│   │   │   └── DeliveryRule.php
+│   │   ├── Offer/
+│   │   │   └── RedWidgetHalfPriceOffer.php
+│   │   └── Product/
+│   │       ├── Catalogue.php
+│   │       └── Product.php
+│   └── Service/
+│       └── BasketService.php
+├── tests/
+│   ├── Integration/
+│   │   └── Service/
+│   │       └── BasketServiceIntegrationTest.php
+│   └── Unit/
+│       ├── Domain/
+│       │   ├── Basket/
+│       │   │   ├── BasketItemTest.php
+│       │   │   └── BasketTest.php
+│       │   ├── Delivery/
+│       │   │   └── DeliveryRuleTest.php
+│       │   ├── Offer/
+│       │   │   └── RedWidgetHalfPriceOfferTest.php
+│       │   └── Product/
+│       │       ├── CatalogueTest.php
+│       │       └── ProductTest.php
+│       └── Service/
+│           └── BasketServiceTest.php
+├── .github/
+│   └── workflows/
+│       └── test.yml
+├── composer.json
+├── phpcs.xml
+└── README.md
 ```
 
-For example, to run the `hello` command:
+## Working
+- **BasketService**: The main service that handles basket operations, including adding products, calculating costs, and applying discounts.
+- **DeliveryRule**: Calculates delivery costs based on the subtotal.
+- **RedWidgetHalfPriceOffer**: Applies a discount for every pair of red widgets.
+- **Catalogue**: Manages the product catalog.
+- **Basket**: Represents a shopping basket with items and total calculations.
 
-```bash
-php bin/thrive-cart hello
-```
+## Local Run
+1. **Clone the repository**:
+   ```sh
+   git clone <repository-url>
+   cd ThriveCart
+   ```
 
-### Available Commands
+2. **Install dependencies**:
+   ```sh
+   composer install
+   ```
 
-- **hello**: Displays a greeting message.
+3. **Run the CLI command**:
+   ```sh
+   bin/thrive-cart basket:cost R01,G01,B01
+   ```
 
-### Adding New Commands
+## Docker Run
+1. **Build the Docker image**:
+   ```sh
+   docker build -t thrive-cart .
+   ```
 
-To add a new command, create a new class in `src/Console/Command` that extends `AbstractCommand` and implement the required methods. Then, register the command in `bin/thrive-cart`.
+2. **Run the container**:
+   ```sh
+   docker run thrive-cart basket:cost R01,G01,B01
+   ```
 
-Example:
+## Scripts
+- **Test**: Run unit and integration tests.
+  ```sh
+  composer test
+  ```
 
-```php
-<?php
+- **PHPStan**: Run static analysis.
+  ```sh
+  composer phpstan
+  ```
 
-declare(strict_types=1);
+- **Code Style Check**: Check code style using PHP_CodeSniffer.
+  ```sh
+  composer cs-check
+  ```
 
-namespace ThriveCartAcme\Console\Command;
+- **Code Style Fix**: Automatically fix code style issues.
+  ```sh
+  composer cs-fix
+  ```
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+- **Check All**: Run all checks (PHPStan, code style, and tests).
+  ```sh
+  composer check
+  ```
 
-class NewCommand extends AbstractCommand
-{
-    protected function configure(): void
-    {
-        $this
-            ->setName('new')
-            ->setDescription('Description of the new command')
-            ->setHelp('Help text for the new command');
-    }
-
-    protected function handle(InputInterface $input, OutputInterface $output): int
-    {
-        $output->writeln('<info>New command executed!</info>');
-        return SymfonyCommand::SUCCESS;
-    }
-}
-```
-
-Then, in `bin/thrive-cart`, add:
-
-```php
-$application->add(new NewCommand());
-```
+## CI/CD
+The project uses GitHub Actions for continuous integration. The workflow runs unit tests, integration tests, static analysis, and code style checks on every push and pull request to the `main` branch.
