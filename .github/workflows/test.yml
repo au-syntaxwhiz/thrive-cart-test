@@ -7,10 +7,9 @@ on:
     branches: [ main ]
 
 jobs:
-  test:
-    name: Run Tests
+  unit-tests:
+    name: Unit Tests
     runs-on: ubuntu-latest
-    
     steps:
     - uses: actions/checkout@v4
 
@@ -24,21 +23,68 @@ jobs:
     - name: Install Dependencies
       run: composer install --prefer-dist --no-progress
 
-    - name: Run PHPUnit Tests
-      run: composer test
-      continue-on-error: false
+    - name: Run Unit Tests
+      run: composer test -- --testsuite Unit
+
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        coverage: none
+        tools: composer:v2
+
+    - name: Install Dependencies
+      run: composer install --prefer-dist --no-progress
+
+    - name: Run Integration Tests
+      run: composer test -- --testsuite Integration
+
+  static-analysis:
+    name: Static Analysis
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        coverage: none
+        tools: composer:v2
+
+    - name: Install Dependencies
+      run: composer install --prefer-dist --no-progress
 
     - name: Run PHPStan
       run: composer phpstan
-      continue-on-error: false
-
-    - name: Run Code Style Check
-      run: composer cs-check
-      continue-on-error: false
 
     - name: Run Psalm
       run: composer psalm
-      continue-on-error: false
+
+  code-style:
+    name: Code Style
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        coverage: none
+        tools: composer:v2
+
+    - name: Install Dependencies
+      run: composer install --prefer-dist --no-progress
+
+    - name: Run Code Style Check
+      run: composer cs-check
 
     - name: Check Test Results
       if: failure()
