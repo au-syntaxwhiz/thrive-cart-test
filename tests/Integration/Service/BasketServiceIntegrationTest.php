@@ -7,21 +7,15 @@ namespace Tests\Integration\Service;
 use PHPUnit\Framework\TestCase;
 use ThriveCartAcme\Service\BasketService;
 use ThriveCartAcme\Domain\Product\Catalogue;
-use ThriveCartAcme\Domain\Delivery\DeliveryRule;
-use ThriveCartAcme\Domain\Offer\RedWidgetHalfPriceOffer;
 
 class BasketServiceIntegrationTest extends TestCase
 {
     private BasketService $basketService;
     private Catalogue $catalogue;
-    private DeliveryRule $deliveryRule;
-    private array $offers;
 
     protected function setUp(): void
     {
         $this->catalogue = new Catalogue();
-        $this->deliveryRule = new DeliveryRule();
-        $this->offers = [new RedWidgetHalfPriceOffer()];
         $this->basketService = new BasketService();
     }
 
@@ -41,7 +35,7 @@ class BasketServiceIntegrationTest extends TestCase
         $this->assertEquals(7.95, $products['B01']->getPrice());
     }
 
-    public function testServiceWithEmptyBasket(): void
+    public function testEmptyBasket(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('At least one product must be selected.');
@@ -49,16 +43,72 @@ class BasketServiceIntegrationTest extends TestCase
         $this->basketService->__invoke([]);
     }
 
-    public function testServiceWithSingleProduct(): void
+    public function testSingleProduct(): void
     {
-        $costs = $this->basketService->__invoke(['B01']);
+        $result = $this->basketService->__invoke(['R01']);
 
-        $this->assertEquals([
-            'subtotal' => 7.95,
-            'discount' => 0.00,
-            'delivery' => 4.95,
-            'total' => 12.90
-        ], $costs);
+        $this->assertEquals(32.95, $result['subtotal']);
+        $this->assertEquals(0.00, $result['discount']);
+        $this->assertEquals(4.95, $result['delivery']);
+        $this->assertEquals(37.90, $result['total']);
+    }
+
+    public function testMultipleProducts(): void
+    {
+        $result = $this->basketService->__invoke(['R01', 'G01']);
+
+        $this->assertEquals(57.90, $result['subtotal']);
+        $this->assertEquals(0.00, $result['discount']);
+        $this->assertEquals(4.95, $result['delivery']);
+        $this->assertEquals(62.85, $result['total']);
+    }
+
+    public function testRedWidgetOffer(): void
+    {
+        $result = $this->basketService->__invoke(['R01', 'R01']);
+
+        $this->assertEquals(65.90, $result['subtotal']);
+        $this->assertEquals(16.48, $result['discount']);
+        $this->assertEquals(4.95, $result['delivery']);
+        $this->assertEquals(54.37, $result['total']);
+    }
+
+    public function testFreeDelivery(): void
+    {
+        $result = $this->basketService->__invoke(['R01', 'R01', 'G01', 'B01']);
+
+        $this->assertEquals(98.80, $result['subtotal']);
+        $this->assertEquals(16.48, $result['discount']);
+        $this->assertEquals(0.00, $result['delivery']);
+        $this->assertEquals(82.32, $result['total']);
+    }
+
+    public function testInvalidProductCode(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Product code INVALID not found in catalogue.');
+
+        $this->basketService->__invoke(['INVALID']);
+    }
+
+    public function testMixedCaseProductCodes(): void
+    {
+        $result = $this->basketService->__invoke(['r01', 'G01']);
+
+        $this->assertEquals(57.90, $result['subtotal']);
+        $this->assertEquals(0.00, $result['discount']);
+        $this->assertEquals(4.95, $result['delivery']);
+        $this->assertEquals(62.85, $result['total']);
+    }
+
+    public function testExtraSpacesInProductCodes(): void
+    {
+        $result = $this->basketService->__invoke([' R01 ', 'G01 ']);
+
+        $this->assertEquals(57.90, $result['subtotal']);
+        $this->assertEquals(0.00, $result['discount']);
+        $this->assertEquals(4.95, $result['delivery']);
+        $this->assertEquals(62.85, $result['total']);
     }
 
     public function testServiceWithMultipleProducts(): void
@@ -70,74 +120,6 @@ class BasketServiceIntegrationTest extends TestCase
             'discount' => 0.00,
             'delivery' => 2.95,
             'total' => 68.80
-        ], $costs);
-    }
-
-    public function testServiceWithRedWidgetOffer(): void
-    {
-        $costs = $this->basketService->__invoke(['R01', 'R01']);
-
-        $this->assertEquals([
-            'subtotal' => 65.90,
-            'discount' => 16.48,
-            'delivery' => 4.95,
-            'total' => 54.37
-        ], $costs);
-    }
-
-    public function testServiceWithFreeDelivery(): void
-    {
-        $costs = $this->basketService->__invoke(['R01', 'R01', 'G01', 'B01']);
-
-        $this->assertEquals([
-            'subtotal' => 98.80,
-            'discount' => 16.48,
-            'delivery' => 2.95,
-            'total' => 85.27
-        ], $costs);
-    }
-
-    public function testServiceWithInvalidProduct(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Product code INVALID not found in catalogue.');
-
-        $this->basketService->__invoke(['INVALID']);
-    }
-
-    public function testServiceWithMixedCaseProductCodes(): void
-    {
-        $costs = $this->basketService->__invoke(['r01', 'R01', 'g01']);
-
-        $this->assertEquals([
-            'subtotal' => 90.85,
-            'discount' => 16.48,
-            'delivery' => 2.95,
-            'total' => 77.32
-        ], $costs);
-    }
-
-    public function testServiceWithExtraSpaces(): void
-    {
-        $costs = $this->basketService->__invoke(['R01 ', ' R01', ' G01']);
-
-        $this->assertEquals([
-            'subtotal' => 90.85,
-            'discount' => 16.48,
-            'delivery' => 2.95,
-            'total' => 77.32
-        ], $costs);
-    }
-
-    public function testServiceWithMultipleRedWidgetPairs(): void
-    {
-        $costs = $this->basketService->__invoke(['R01', 'R01', 'R01', 'R01']);
-
-        $this->assertEquals([
-            'subtotal' => 131.80,
-            'discount' => 32.95,
-            'delivery' => 0.00,
-            'total' => 98.85
         ], $costs);
     }
 

@@ -7,7 +7,9 @@ namespace ThriveCartAcme\Service;
 use ThriveCartAcme\Domain\Basket\Basket;
 use ThriveCartAcme\Domain\Delivery\DeliveryRule;
 use ThriveCartAcme\Domain\Offer\RedWidgetHalfPriceOffer;
+use ThriveCartAcme\Domain\Offer\OfferInterface;
 use ThriveCartAcme\Domain\Product\Catalogue;
+use ThriveCartAcme\Domain\Product\Product;
 use ThriveCartAcme\Domain\Basket\BasketItem;
 
 class BasketService
@@ -55,6 +57,9 @@ class BasketService
         return new Basket($this->catalogue, $this->deliveryRule, $this->offers);
     }
 
+    /**
+     * @param array<string> $productCodes
+     */
     private function addProductsToBasket(Basket $basket, array $productCodes): void
     {
         foreach ($productCodes as $productCode) {
@@ -62,6 +67,9 @@ class BasketService
         }
     }
 
+    /**
+     * @return array{subtotal: float, discount: float, delivery: float, total: float}
+     */
     private function calculateCosts(Basket $basket): array
     {
         $subtotal = $this->calculateSubtotal($basket->getItems());
@@ -78,6 +86,9 @@ class BasketService
         ];
     }
 
+    /**
+     * @param array<BasketItem> $items
+     */
     private function calculateSubtotal(array $items): float
     {
         return array_reduce(
@@ -87,11 +98,14 @@ class BasketService
         );
     }
 
+    /**
+     * @param array<BasketItem> $items
+     */
     private function calculateDiscount(array $items): float
     {
         return array_reduce(
             $this->offers,
-            fn(float $sum, $offer) => $sum + $offer->apply($items),
+            fn(float $sum, OfferInterface $offer) => $sum + $offer->apply($items),
             0.0
         );
     }
