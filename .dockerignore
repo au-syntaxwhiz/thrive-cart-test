@@ -1,0 +1,12 @@
+.git
+.gitignore
+.github
+vendor
+tests
+phpunit.xml
+phpstan.neon
+.phpstan-baseline.neon
+README.md
+docker-compose.yml
+Dockerfile
+.dockerignore 

@@ -1,0 +1,47 @@
+name: Test Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        coverage: none
+        tools: composer:v2
+
+    - name: Install Dependencies
+      run: composer install --prefer-dist --no-progress
+
+    - name: Run PHPUnit Tests
+      run: composer test
+      continue-on-error: false
+
+    - name: Run PHPStan
+      run: composer phpstan
+      continue-on-error: false
+
+    - name: Run Code Style Check
+      run: composer cs-check
+      continue-on-error: false
+
+    - name: Run Psalm
+      run: composer psalm
+      continue-on-error: false
+
+    - name: Check Test Results
+      if: failure()
+      run: |
+        echo "::error::Tests failed. Please fix the issues before merging."
+        exit 1 
