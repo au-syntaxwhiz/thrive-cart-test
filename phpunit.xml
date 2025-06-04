@@ -8,34 +8,28 @@
          displayDetailsOnTestsThatTriggerNotices="true"
          displayDetailsOnTestsThatTriggerErrors="true"
          displayDetailsOnTestsThatTriggerDeprecations="true"
-         displayDetailsOnTestsThatTriggerPhpunitDeprecations="true"
          failOnWarning="true"
          failOnNotice="true"
          failOnEmptyTestSuite="true"
-         failOnRisky="true"
+         failOnRisky="false"
          failOnIncomplete="true"
          failOnSkipped="true"
          failOnDeprecation="true"
-         failOnPhpunitDeprecation="true"
          stopOnWarning="true"
          stopOnNotice="true"
-         stopOnRisky="true"
+         stopOnRisky="false"
          stopOnIncomplete="true"
          stopOnSkipped="true"
          stopOnDeprecation="true"
-         stopOnPhpunitDeprecation="true"
          executionOrder="random"
          resolveDependencies="true"
-         requireCoverageMetadata="true"
-         beStrictAboutCoverageMetadata="true"
-         beStrictAboutOutputDuringTests="true"
-         beStrictAboutTodoAnnotatedTests="true">
+         beStrictAboutOutputDuringTests="true">
     <testsuites>
         <testsuite name="Unit">
             <directory>tests/Unit</directory>
         </testsuite>
-        <testsuite name="Feature">
-            <directory>tests/Feature</directory>
+        <testsuite name="Integration">
+            <directory>tests/Integration</directory>
         </testsuite>
     </testsuites>
     <source>

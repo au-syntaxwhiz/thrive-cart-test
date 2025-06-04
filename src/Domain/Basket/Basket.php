@@ -34,6 +34,9 @@ class Basket implements BasketInterface
 
     public function add(string $productCode): void
     {
+        $productCode = trim($productCode);
+        $productCode = strtoupper($productCode);
+
         if (!isset($this->catalogue[$productCode])) {
             throw new \InvalidArgumentException("Product code $productCode not found in catalogue.");
         }

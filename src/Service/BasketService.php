@@ -40,6 +40,10 @@ class BasketService
      */
     public function __invoke(array $productCodes): array
     {
+        if (empty($productCodes)) {
+            throw new \InvalidArgumentException('At least one product must be selected.');
+        }
+
         $basket = $this->createBasket();
         $this->addProductsToBasket($basket, $productCodes);
 
@@ -62,8 +66,9 @@ class BasketService
     {
         $subtotal = $this->calculateSubtotal($basket->getItems());
         $discount = $this->calculateDiscount($basket->getItems());
-        $delivery = $this->calculateDelivery($subtotal);
-        $total = round($subtotal - $discount + $delivery, 2);
+        $subtotalAfterDiscount = $subtotal - $discount;
+        $delivery = $this->calculateDelivery($subtotalAfterDiscount);
+        $total = round($subtotalAfterDiscount + $delivery, 2);
 
         return [
             'subtotal' => round($subtotal, 2),

@@ -18,14 +18,10 @@ class BasketServiceTest extends TestCase
 
     public function testCalculateCostsWithNoItems(): void
     {
-        $costs = $this->basketService->__invoke([]);
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('At least one product must be selected.');
 
-        $this->assertEquals([
-            'subtotal' => 0.00,
-            'discount' => 0.00,
-            'delivery' => 4.95,
-            'total' => 4.95
-        ], $costs);
+        $this->basketService->__invoke([]);
     }
 
     public function testCalculateCostsWithSingleItem(): void
@@ -47,8 +43,8 @@ class BasketServiceTest extends TestCase
         $this->assertEquals([
             'subtotal' => 65.90,
             'discount' => 16.48,
-            'delivery' => 2.95,
-            'total' => 52.37
+            'delivery' => 4.95,
+            'total' => 54.37
         ], $costs);
     }
 
@@ -59,8 +55,8 @@ class BasketServiceTest extends TestCase
         $this->assertEquals([
             'subtotal' => 98.80,
             'discount' => 16.48,
-            'delivery' => 0.00,
-            'total' => 82.32
+            'delivery' => 2.95,
+            'total' => 85.27
         ], $costs);
     }
 
