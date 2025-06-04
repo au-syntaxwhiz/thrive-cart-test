@@ -50,13 +50,13 @@ class BasketServiceTest extends TestCase
 
     public function testCalculateCostsWithFreeDelivery(): void
     {
-        $costs = $this->basketService->__invoke(['R01', 'R01', 'G01', 'B01']);
+        $costs = $this->basketService->__invoke(['B01', 'B01', 'R01', 'R01', 'R01']);
 
         $this->assertEquals([
-            'subtotal' => 98.80,
+            'subtotal' => 114.75,
             'discount' => 16.48,
-            'delivery' => 2.95,
-            'total' => 85.27
+            'delivery' => 0.00,
+            'total' => 98.27
         ], $costs);
     }
 

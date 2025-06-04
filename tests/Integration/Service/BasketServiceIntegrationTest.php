@@ -59,8 +59,8 @@ class BasketServiceIntegrationTest extends TestCase
 
         $this->assertEquals(57.90, $result['subtotal']);
         $this->assertEquals(0.00, $result['discount']);
-        $this->assertEquals(4.95, $result['delivery']);
-        $this->assertEquals(62.85, $result['total']);
+        $this->assertEquals(2.95, $result['delivery']);
+        $this->assertEquals(60.85, $result['total']);
     }
 
     public function testRedWidgetOffer(): void
@@ -73,16 +73,6 @@ class BasketServiceIntegrationTest extends TestCase
         $this->assertEquals(54.37, $result['total']);
     }
 
-    public function testFreeDelivery(): void
-    {
-        $result = $this->basketService->__invoke(['R01', 'R01', 'G01', 'B01']);
-
-        $this->assertEquals(98.80, $result['subtotal']);
-        $this->assertEquals(16.48, $result['discount']);
-        $this->assertEquals(0.00, $result['delivery']);
-        $this->assertEquals(82.32, $result['total']);
-    }
-
     public function testInvalidProductCode(): void
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -93,22 +83,26 @@ class BasketServiceIntegrationTest extends TestCase
 
     public function testMixedCaseProductCodes(): void
     {
-        $result = $this->basketService->__invoke(['r01', 'G01']);
+        $costs = $this->basketService->__invoke(['r01', 'G01']);
 
-        $this->assertEquals(57.90, $result['subtotal']);
-        $this->assertEquals(0.00, $result['discount']);
-        $this->assertEquals(4.95, $result['delivery']);
-        $this->assertEquals(62.85, $result['total']);
+        $this->assertEquals([
+            'subtotal' => 57.90,
+            'discount' => 0.00,
+            'delivery' => 2.95,
+            'total' => 60.85
+        ], $costs);
     }
 
     public function testExtraSpacesInProductCodes(): void
     {
-        $result = $this->basketService->__invoke([' R01 ', 'G01 ']);
+        $costs = $this->basketService->__invoke([' R01 ', 'G01 ']);
 
-        $this->assertEquals(57.90, $result['subtotal']);
-        $this->assertEquals(0.00, $result['discount']);
-        $this->assertEquals(4.95, $result['delivery']);
-        $this->assertEquals(62.85, $result['total']);
+        $this->assertEquals([
+            'subtotal' => 57.90,
+            'discount' => 0.00,
+            'delivery' => 2.95,
+            'total' => 60.85
+        ], $costs);
     }
 
     public function testServiceWithMultipleProducts(): void
