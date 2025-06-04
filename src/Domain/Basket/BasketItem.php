@@ -44,4 +44,14 @@ class BasketItem implements BasketItemInterface
     {
         return $this->product->getPrice() * $this->quantity;
     }
+
+    /**
+     * Calculate the total price for this item based on quantity.
+     * 
+     * @return float The total price for this item
+     */
+    public function getTotalPrice(): float
+    {
+        return $this->product->getPrice() * $this->quantity;
+    }
 }

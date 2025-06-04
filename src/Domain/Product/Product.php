@@ -21,9 +21,22 @@ class Product implements ProductInterface
      * @param string $code Unique identifier for the product
      * @param string $name Display name of the product
      * @param float $price Price of the product in the base currency
+     * @throws \InvalidArgumentException If code or name is empty, or price is negative
      */
     public function __construct(string $code, string $name, float $price)
     {
+        if (empty(trim($code))) {
+            throw new \InvalidArgumentException('Product code cannot be empty');
+        }
+
+        if (empty(trim($name))) {
+            throw new \InvalidArgumentException('Product name cannot be empty');
+        }
+
+        if ($price < 0) {
+            throw new \InvalidArgumentException('Price cannot be negative');
+        }
+
         $this->code = $code;
         $this->name = $name;
         $this->price = $price;

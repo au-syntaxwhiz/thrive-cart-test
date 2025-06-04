@@ -28,9 +28,9 @@ interface BasketItemInterface
     public function increment(): void;
 
     /**
-     * Calculate the total cost for this item
+     * Calculate the total price for this item based on quantity
      * 
      * @return float
      */
-    public function getTotal(): float;
+    public function getTotalPrice(): float;
 }
