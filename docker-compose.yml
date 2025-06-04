@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: thrive-cart
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: php -a
+    environment:
+      - APP_ENV=development
+      - COMPOSER_ALLOW_SUPERUSER=1
