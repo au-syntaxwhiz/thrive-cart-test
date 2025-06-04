@@ -17,7 +17,7 @@ class BasketItem implements BasketItemInterface
 
     /**
      * Create a new basket item for a product.
-     * 
+     *
      * @param Product $product The product to add to the basket
      */
     public function __construct(Product $product)
@@ -47,7 +47,7 @@ class BasketItem implements BasketItemInterface
 
     /**
      * Calculate the total price for this item based on quantity.
-     * 
+     *
      * @return float The total price for this item
      */
     public function getTotalPrice(): float

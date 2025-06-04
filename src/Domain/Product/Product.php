@@ -17,7 +17,7 @@ class Product implements ProductInterface
 
     /**
      * Create a new product.
-     * 
+     *
      * @param string $code Unique identifier for the product
      * @param string $name Display name of the product
      * @param float $price Price of the product in the base currency

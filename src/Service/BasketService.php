@@ -36,7 +36,7 @@ class BasketService
 
     /**
      * Calculate the total cost of a basket containing the specified products.
-     * 
+     *
      * @param array<string> $productCodes Array of product codes to add to the basket
      * @return array{subtotal: float, discount: float, delivery: float, total: float} Cost breakdown
      */

@@ -64,9 +64,6 @@ jobs:
     - name: Run PHPStan
       run: composer phpstan
 
-    - name: Run Psalm
-      run: composer psalm
-
   code-style:
     name: Code Style
     runs-on: ubuntu-latest

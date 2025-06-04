@@ -8,14 +8,14 @@ interface CatalogueInterface
 {
     /**
      * Get all products in the catalogue
-     * 
+     *
      * @return array<string, Product>
      */
     public function getProducts(): array;
 
     /**
      * Get a product by its code
-     * 
+     *
      * @param string $code
      * @return Product|null
      */
@@ -23,7 +23,7 @@ interface CatalogueInterface
 
     /**
      * Check if a product exists in the catalogue
-     * 
+     *
      * @param string $code
      * @return bool
      */

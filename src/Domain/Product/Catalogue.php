@@ -32,7 +32,7 @@ class Catalogue implements CatalogueInterface
 
     /**
      * Get a product by its code.
-     * 
+     *
      * @param string $code The product code to look up
      * @return Product The requested product
      * @throws \InvalidArgumentException If the product code is not found

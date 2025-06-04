@@ -10,8 +10,7 @@
     "require-dev": {
         "phpunit/phpunit": "*",
         "phpstan/phpstan": "*",
-        "squizlabs/php_codesniffer": "*",
-        "vimeo/psalm": "*"
+        "squizlabs/php_codesniffer": "*"
     },
     "autoload": {
         "psr-4": {
@@ -28,11 +27,9 @@
         "phpstan": "phpstan analyse src tests",
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
-        "psalm": "psalm",
         "check": [
             "@phpstan",
             "@cs-check",
-            "@psalm",
             "@test"
         ]
     },

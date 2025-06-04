@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<ruleset name="ThriveCart PHPCS">
+    <description>PHP_CodeSniffer configuration for ThriveCart project</description>
+    <rule ref="PSR12"/>
+    <file>src</file>
+    <file>tests</file>
+    <exclude-pattern>vendor/*</exclude-pattern>
+</ruleset>

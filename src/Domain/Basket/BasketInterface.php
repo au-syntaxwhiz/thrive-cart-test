@@ -10,7 +10,7 @@ interface BasketInterface
 {
     /**
      * Add a product to the basket
-     * 
+     *
      * @param string $productCode
      * @throws \InvalidArgumentException if product code not found
      */
@@ -18,14 +18,14 @@ interface BasketInterface
 
     /**
      * Calculate the total cost of the basket including discounts and delivery
-     * 
+     *
      * @return float
      */
     public function total(): float;
 
     /**
      * Get all items in the basket
-     * 
+     *
      * @return array<BasketItem>
      */
     public function getItems(): array;
